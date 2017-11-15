@@ -1,0 +1,17 @@
+[0] Config.pm:302> INFO - This is Biber 2.8
+[1] Config.pm:305> INFO - Logfile is 'main.blg'
+[64] biber-MSWIN32:313> INFO - === 
+[102] Biber.pm:361> INFO - Reading 'main.bcf'
+[298] Biber.pm:847> INFO - Found 1 citekeys in bib section 0
+[327] Biber.pm:3971> INFO - Processing section 0
+[358] Biber.pm:4144> INFO - Looking for bibtex format file 'references.bib' for section 0
+[370] bibtex.pm:1449> INFO - Decoding LaTeX character macros into UTF-8
+[378] bibtex.pm:1305> INFO - Found BibTeX data source 'references.bib'
+[390] Utils.pm:169> WARN - month field 'Aug' in entry 'bruna2013invariant' is not an integer - this will probably not sort properly.
+[411] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[411] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[413] Biber.pm:3799> INFO - Sorting list 'nty/global//global/global' of type 'entry' with template 'nty' and locale 'en-US'
+[414] Biber.pm:3805> INFO - No sort tailoring available for locale 'en-US'
+[417] bbl.pm:613> INFO - Writing 'main.bbl' with encoding 'ascii'
+[419] bbl.pm:716> INFO - Output to main.bbl
+[427] Biber.pm:110> INFO - WARNINGS: 1

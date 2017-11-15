@@ -1,0 +1,7 @@
+[0] Config.pm:302> INFO - This is Biber 2.8 running in TOOL mode
+[1] Config.pm:305> INFO - Logfile is 'references.bib.blg'
+[68] biber-MSWIN32:313> INFO - === 
+[131] Biber.pm:4140> INFO - Looking for bibtex format file 'references.bib'
+[136] bibtex.pm:1449> INFO - Decoding LaTeX character macros into UTF-8
+[145] bibtex.pm:1305> INFO - Found BibTeX data source 'references.bib'
+[155] Utils.pm:169> WARN - month field 'Aug' in entry 'bruna2013invariant' is not an integer - this will probably not sort properly.
