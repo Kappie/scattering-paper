@@ -1,6 +1,10 @@
 \documentclass[twocolumn, openany, twoside, article]{memoir}
 
 \usepackage[style=numeric-comp, backend=biber]{biblatex}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+
 \bibliography{references}
 
 \title{Mijn titel}
@@ -40,8 +44,79 @@ nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
 fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
 culpa qui officia deserunt mollit anim id est laborum.
-
 \cite{bruna2013invariant}
+
+
+\chapter{Constructing the Morlet wavelet}
+In order to satisfy the Paley-Littlewood condition, we require that the Morlet wavelets average to zero in the spatial domain,
+which corresponds to $\hat{\psi}(\bm{0}) = 0$ in the Fourier domain. To achieve this for a discretely sampled Gabor wavelet, we substract
+a constant $\kappa_{\sigma} \ll 1$ from the plane-wave part
+\begin{equation}
+  \psi(\bm{x}) = g_{\sigma}(\bm{x})(e^{i \bm{\xi} \bm{x}} - \kappa_{\sigma})
+\end{equation}
+where $g_{\sigma}$ is a Gaussian of standard deviation $\sigma$ and center frequency $\bm{\xi} = (\xi, 0, 0)$ by convention.
+We will specify how to find a suitable $\sigma$ and $\xi$ shortly.
+The Fourier transform is
+\begin{equation}
+  \hat{\psi}(\bm{\omega}) = \hat{g}_{\sigma}(\bm{\omega} - \bm{\xi}) - \kappa_{\sigma}\hat{g}_{\sigma}(\bm{\omega}).
+\end{equation}
+The requirement $\hat{\psi}(\bm{0}) = 0$ leads to
+\begin{equation}
+  \kappa_{\sigma} = \frac{\hat{g}_{\sigma}(-\bm{\xi})}{\hat{g}_{\sigma}(\bm{0})}.
+\end{equation}
+
+Instead of labeling a wavelet by its standard deviation in the spatial domain $\sigma$, it is in this case
+more insightful to label it by its bandwidth $b$ in the Fourier domain, defined by
+\begin{equation}
+  \hat{g}_{\sigma}\left(\pm \left(\frac{b}{2}, 0, 0 \right) \right) = \exp \left( -\frac{1}{2}\sigma^2 \left(\frac{b}{2}\right)^2 \right) = \frac{1}{\sqrt{2}}
+\end{equation}
+leading to
+\begin{equation}
+  b^2 = \frac{4 \ln 2}{\sigma^2}.
+\end{equation}
+
+
+\section{Rotating and scaling the mother wavelet}
+A wavelet transform is defined by dilating the mother wavelet by scale factors $\left\{ a^j \right\}_{j \in \mathbb{Z}}$
+and rotating it by rotations $r$ in $\mathbb{R}^d$. $a = 2$ is common for image analysis (at least in two dimensions).
+A wavelet of dilation $a^j$ and orientation $r$ looks like
+\begin{equation}
+  \psi_{a^j, r}(\bm{x}) = a^{-dj} \psi(a^{-j}r\bm{x})
+\end{equation}
+where the normalisation $a^{-dj}$ ($d = 3$ in our case) is chosen such that the energy of the mother wavelet is conserved
+\begin{equation}
+  \int_{\mathbb{R}^d} d\bm{x} | \psi_{a^j, r}(\bm{x}) | = \int_{\mathbb{R}^d} d\bm{x} | \psi(\bm{x}) |.
+\end{equation}
+The dilated and scaled Morlet wavelet becomes in the Fourier domain
+\begin{equation}
+  \hat{\psi}_{a^j, r}(\bm{\omega}) = a^{-dj} \left( \hat{g}_{\sigma}(a^j r^{-1} \bm{\omega} - \bm{\xi}) - \kappa_{\sigma}\hat{g}_{\sigma}(a^j r^{-1} \bm{\omega}) \right)
+\end{equation}
+so that it is (apart from a small corrective term) centered at frequency $\bm{\omega} = a^{-j}r\bm{\xi}$
+with bandwidth $b_{a^j} = a^{-j}b$. Note that the corrective factor $\kappa_{\sigma}$ is invariant under dilation and rotation.
+
+
+\section{Littlewood-Paley condition}
+
+The rotations and dilations of the mother wavelet form an overcomplete basis or frame of $L^2(\mathbb{R}^d)$
+(finite-energy functions in $d$ dimensions, including all audio signals, CT scans, etc.) But in practice we can only
+choose a finite amount of wavelets of dilations $\left\{ a^j \right\}_{j = 0, 1, \dots, J}$ and orientations $r \in R$.
+How can we still make sure we capture all relevant information in the signal?
+To capture the low frequency information (at scales $a^j$ with $j > J$), we add a low-pass filter of
+length scale $J$ to our set of wavelets, which we denote by $\phi_J(\bm{x})$ and take to be a Gaussian in practice.
+The rotations $r$ must be chosen to discretize the rotation group in $\mathbb{R}^d$, which is not trivial in $\mathbb{R}^3$.
+To check if we have indeed covered the whole frequency space, our wavelets must satisfy the Littlewood-Paley condition
+\begin{equation}
+  (1 - \epsilon) \leq A(\bm{\omega}) \leq 1 \qquad \forall \bm{\omega} \in \mathbb{R}^d
+\end{equation}
+with
+\begin{equation}
+  A(\bm{\omega}) = \left| \hat{\phi}(\bm{\omega}) \right|^2 + \frac{1}{2} \sum_{j \leq J} \sum_{r \in R}
+  \left( \left| \hat{\psi}_{a^j, r}(\bm{\omega}) \right|^2 + \left| \hat{\psi}_{a^j, r}(\bm{-\omega}) \right|^2 \right)
+\end{equation}
+and $\epsilon$ small.
+
+
+
 
 \printbibliography
 
