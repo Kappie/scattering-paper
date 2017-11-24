@@ -121,6 +121,22 @@ and $\epsilon$ small.
 \section{Normalization of filter bank}
 
 \section{Downsampling in the Fourier domain}
+I downsample in the Fourier domain by a factor $2^j$ by simply setting to zero all frequencies
+outside the range $[-\frac{\pi}{2^j}, \frac{\pi}{2^j}]$ in each dimension. This ideal low-pass filter corresponds to a
+convolution with a normalized sinc-filter in the spatial domain.
+
+For a discrete-time signal $x[n]$, the Fourier transform is
+\begin{equation}
+  X[\omega] = \sum_{n = -\infty}^{\infty} x[n] e^{-i\omega n}.
+\end{equation}
+Downsampling the spatial signal $x$ by a factor $D$, i.e.
+\begin{equation}
+  x_D[n] = x[Dn]
+\end{equation}
+corresponds in the Fourier domain to
+\begin{equation}
+  X_D[\omega] = \frac{1}{D}\sum_{k=0}^{D-1}X(\frac{\omega - 2 \pi k}{D}).
+\end{equation}
 
 
 
