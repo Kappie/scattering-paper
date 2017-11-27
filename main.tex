@@ -1,9 +1,11 @@
-\documentclass[twocolumn, openany, twoside, article]{memoir}
+\documentclass[twocolumn, openany, oneside, article]{memoir}
 
 \usepackage[style=numeric-comp, backend=biber]{biblatex}
 \usepackage{bm}
 \usepackage{amsmath}
 \usepackage{amsfonts}
+\usepackage{csquotes}
+\usepackage{hyperref}
 
 \bibliography{references}
 
@@ -33,37 +35,114 @@ research efforts of the last three months accessible. I have made no huge effort
 to cite the first paper to establish a concept or even to cite well-established
 results at all.
 
-The challenge at hand is, in the broadest sense, to use statistical models and computational power to improve healthcare.
+The challenge at hand is, in the broadest sense, to use statistical models and computational power to improve outcome
+for ischemic stroke patients. This note focuses on using image data to aid radiologists in the process of deciding, in
+the earliest possible stage, whether to use intra-arterial therapy (a relatively new endovascular, catheter-based
+treatment.)
+
+I have limited my study to finding image features in 3D NCCT scans that are relevant for this decision. I believe that,
+despite popularity and exceptional engineering results in many areas (easily outperforming \enquote{hand-crafted}
+algorithms), deep learning is not the best tool for this problem (and I suspect many other problems in the medical
+domain), because medical images are high-dimensional, training data is scarce and there is not always a clearly defined
+ground truth.
+
+What I have tried here is to use a different approach, namely one where no model is trained for feature extraction, but
+which uses an image representation called the scattering transform, that is known to have certain desirable properties,
+e.g. it preserves high-frequency information, is translation invariant over a tunable window and stable to deformations.
+This image representation may, in association with a simple classifier like an SVM, be used in classification problems.
+
+In the classification experiments, I have chosen to focus on classifying brain hemispheres as being unaffected or
+affected by stroke, using the MRCLEAN registry. While this is not a clinically relevant problem (classifying which
+hemispheres is affected is a trivial task in most cases?) it serves as a test for the scattering representation, as at
+least there is an unequivocal ground truth. Though not done in this work, the learned features may be visualised to aid
+radiologists in giving an ASPECTS score or otherwise diagnosing the seriousness of the stroke. It is also possible, if a
+good delineation of the ASPECTS regions is available, to directly train a classifier on the scattering representation of
+these regions (though expert's opinion on whether a region is affected or not is not unequivocal, making it difficult to
+attain super-expert performance).
+
 
 \chapter{Scattering transform}
+I will in the briefest possible way state what the scattering transform is. For details
+refer to \cite{anden2014deep, bruna2013invariant}.
 
+A wavelet transform is defined by convolving a signal $d$-dimensional $y(\bm{x})$ with scaled and rotated versions of a
+mother wavelet $\psi_{a^j, r}(\bm{x})$, with $j \in \mathbb{Z}$ and rotations $r \in SO(d)$ (rotation group in $d$
+dimensions). $d = 3$ in our case, since we are dealing with 3D images. $a = 2$ is common for image analysis. We will
+describe in the next section which mother wavelet we use in practice, and how to correctly choose a finite number of
+length scales and rotations $r$ (which is not trivial in 3D).
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-culpa qui officia deserunt mollit anim id est laborum.
-\cite{bruna2013invariant}
-
-
-\chapter{Constructing the Morlet wavelet}
-In order to satisfy the Paley-Littlewood condition, we require that the Morlet wavelets average to zero in the spatial domain,
-which corresponds to $\hat{\psi}(\bm{0}) = 0$ in the Fourier domain. To achieve this for a discretely sampled Gabor wavelet, we substract
-a constant $\kappa_{\sigma} \ll 1$ from the plane-wave part
+A wavelet of dilation $a^j$ and orientation $r$ looks like
 \begin{equation}
-  \psi(\bm{x}) = g_{\sigma}(\bm{x})(e^{i \bm{\xi} \bm{x}} - \kappa_{\sigma})
+  \psi_{a^j, r}(\bm{x}) = a^{-dj} \psi(a^{-j}r\bm{x})
 \end{equation}
-where $g_{\sigma}$ is a Gaussian of standard deviation $\sigma$ and center frequency $\bm{\xi} = (\xi, 0, 0)$ by convention.
-We will specify how to find a suitable $\sigma$ and $\xi$ shortly.
-The Fourier transform is
+where the normalisation $a^{-dj}$ is chosen such that the energy of the mother wavelet is
+conserved
 \begin{equation}
-  \hat{\psi}(\bm{\omega}) = \hat{g}_{\sigma}(\bm{\omega} - \bm{\xi}) - \kappa_{\sigma}\hat{g}_{\sigma}(\bm{\omega}).
+  \int_{\mathbb{R}^d} d\bm{x} | \psi_{a^j, r}(\bm{x}) | = \int_{\mathbb{R}^d} d\bm{x} | \psi(\bm{x}) |.
 \end{equation}
-The requirement $\hat{\psi}(\bm{0}) = 0$ leads to
+Translationally invariant coefficients (called scattering coefficients) of $y(\bm{x})$ that are stable to small deformations are obtained by taking the modulus and taking a spatial average:
 \begin{equation}
-  \kappa_{\sigma} = \frac{\hat{g}_{\sigma}(-\bm{\xi})}{\hat{g}_{\sigma}(\bm{0})}.
+    \left\| y \star \psi_{a^j, r} \right\|_{1} = \int d\bm{x} |y \star \psi_{a^j, r}|.
 \end{equation}
+The signals $|y \star \psi_{a^j, r}|$ are themselves unstable, and in averaging (or equivalently, removing all non-zero
+frequencies) of $|y \star \psi_{a^j, r}|$ information is lost. To remedy this, we can perform a second wavelet
+transform on all first-order transforms, yielding second-order scattering coefficients
+\begin{equation}
+  \left\| |y \star \psi_{a^{j_1}, r_1}| \star \psi_{a^{j_2}, r_2} \right\| = \int d\bm{x} | |y \star \psi_{a^{j_1}, r_1}| \star \psi_{a^{j_2}, r_2} |
+\end{equation}
+for all $j_1, j_2, r_1, r_2$. One can keep iterating this transform to recover more lost information in the form of
+higher-order coefficients, but in practice two layers is sufficient for most tasks (luckily so, because the
+computational resources required scales exponentially in the number of layers).
+
+To make notation easier, we define $\lambda = (j, r)$ and
+\begin{equation}
+  U[\lambda_1, \dots \lambda_m]y = \left| \left| \left| y \star \psi_{\lambda_1} \right| \star \psi_{\lambda_2} \right|
+  \dots \psi_{\lambda_m} \right|
+\end{equation}
+i.e. an unaveraged signal at the $m$th layer. The scattering coefficients
+at the $m$th layer are then written
+\begin{equation}
+  \left\{ \bar{S}y(\lambda_1, \dots \lambda_m) = \int d\bm{x} U[p]y \right\}_{\lambda_i \in \Lambda}
+\end{equation}
+
+In practice it is often better not to average over the entire signals $U[p]$ (where we write $p = \lambda_1, \dots
+\lambda_m$ a \emph{path}), but compute coefficients that are approximately translation invariant over lengths $a^J$.
+This is achieved by computing the wavelet transforms only at scales $j \leq J$ and averaging with a low-pass (blurring) filter (in
+practice a Gaussian) of support $a^J$, denoted by $\phi_{a^J}$
+\begin{equation}
+  S[p]y(\bm{x}) = (U[p] \star \phi_{a^J})(\bm{x}).
+\end{equation}
+$\left\{ S[\lambda_1, \dots, \lambda_m] \right\}_{\lambda_i \in \Lambda}$ are called the windowed scattering
+coefficients at layer $m$. The correct maximum length scale $a^J$ should be chosen based on knowledge about the input
+data or by cross-validation.
+
+\chapter{Implementation details}
+What follows are some considerations for choosing the mother wavelet and
+rotations $r$.
+
+\section{Construction of the mother wavelet}
+
+For the scattering representation to be stable to additive noise and contain all
+high frequency information, it must satisfy the Littlewood-Paley condition
+\begin{equation}\label{eq:lp_condition}
+  (1 - \epsilon) \leq A(\bm{\omega}) \leq 1 \qquad \forall \bm{\omega} \in \mathbb{R}^d
+\end{equation}
+with
+\begin{equation}
+  A(\bm{\omega}) = \left| \hat{\phi}_{a^J}(\bm{\omega}) \right|^2 + \frac{1}{2} \sum_{j \leq J} \sum_{r \in R}
+  \left( \left| \hat{\psi}_{a^j, r}(\bm{\omega}) \right|^2 + \left| \hat{\psi}_{a^j, r}(\bm{-\omega}) \right|^2 \right)
+\end{equation}
+and $\epsilon$ small. Since the low-pass filter $\phi_{a^J}$ is normalized ($\int d\bm{x} \phi_{a^J}(\bm{x}) = 0$ or
+equivalently $\hat{\phi}_{a^J}(\omega = 0) = 1$), the above condition implies
+\begin{equation}\label{eq:averages_to_zero} \hat{\psi}_{a^j, r}(0) = 0 \end{equation} or equivalently: all wavelets
+should average to zero.
+Furthermore, if we define a mother wavelet, called the Morlet wavelet, as follows
+\begin{equation}
+  \psi(\bm{x}) = \mathcal{N} g_{\sigma}(\bm{x})\left( e^{i \xi \bm{x}} - \kappa_{\sigma} \right)
+\end{equation}
+where $g(\bm{x})_{\sigma}$ is a Gaussian and $\kappa_{\sigma} \ll 1$ has to be chosen to satisfy
+\autoref{eq:averages_to_zero}, it will have the property that its Fourier transform is real, hence that if the input
+signal $y$ is real, $U[j, r]y = U[j, -r]y$, allowing us to only consider positive rotations.
 
 Instead of labeling a wavelet by its standard deviation in the spatial domain $\sigma$, it is in this case
 more insightful to label it by its bandwidth $b$ in the Fourier domain, defined by
@@ -75,50 +154,67 @@ leading to
   b^2 = \frac{4 \ln 2}{\sigma^2}.
 \end{equation}
 
-
-\section{Rotating and scaling the mother wavelet}
-A wavelet transform is defined by dilating the mother wavelet by scale factors $\left\{ a^j \right\}_{j \in \mathbb{Z}}$
-and rotating it by rotations $r$ in $\mathbb{R}^d$. $a = 2$ is common for image analysis (at least in two dimensions).
-A wavelet of dilation $a^j$ and orientation $r$ looks like
+The Fourier transform of the Morlet is
 \begin{equation}
-  \psi_{a^j, r}(\bm{x}) = a^{-dj} \psi(a^{-j}r\bm{x})
+  \hat{\psi}(\bm{\omega}) = \mathcal{N} \left( \hat{g}_{\sigma}(\bm{\omega} - \bm{\xi}) -
+  \kappa_{\sigma}\hat{g}_{\sigma}(\bm{\omega}) \right) .
 \end{equation}
-where the normalisation $a^{-dj}$ ($d = 3$ in our case) is chosen such that the energy of the mother wavelet is conserved
+It is, apart from the small factor $\kappa_{\sigma}$, centered at
+$\bm{\xi} = (\xi, 0, 0)$ with bandwidth $b$.
+The requirement $\hat{\psi}(\bm{0}) = 0$ leads to
 \begin{equation}
-  \int_{\mathbb{R}^d} d\bm{x} | \psi_{a^j, r}(\bm{x}) | = \int_{\mathbb{R}^d} d\bm{x} | \psi(\bm{x}) |.
+  \kappa_{\sigma} = \frac{\hat{g}_{\sigma}(-\bm{\xi})}{\hat{g}_{\sigma}(\bm{0})}.
 \end{equation}
-The dilated and scaled Morlet wavelet becomes in the Fourier domain
+The dilated and scaled wavelet becomes in the Fourier domain
 \begin{equation}
-  \hat{\psi}_{a^j, r}(\bm{\omega}) = a^{-dj} \left( \hat{g}_{\sigma}(a^j r^{-1} \bm{\omega} - \bm{\xi}) - \kappa_{\sigma}\hat{g}_{\sigma}(a^j r^{-1} \bm{\omega}) \right)
+  \hat{\psi}_{a^j, r}(\bm{\omega}) = a^{-dj} \mathcal{N} \left( \hat{g}_{\sigma}(a^j r^{-1} \bm{\omega} - \bm{\xi}) - \kappa_{\sigma}\hat{g}_{\sigma}(a^j r^{-1} \bm{\omega}) \right)
 \end{equation}
-so that it is (apart from a small corrective term) centered at frequency $\bm{\omega} = a^{-j}r\bm{\xi}$
-with bandwidth $b_{a^j} = a^{-j}b$. Note that the corrective factor $\kappa_{\sigma}$ is invariant under dilation and rotation.
+so that it is (apart from the small corrective term $\kappa_{\sigma}$) centered at frequency $\bm{\omega_c} =
+a^{-j}r\bm{\xi}$ with bandwidth $b_{a^j} = a^{-j}b$. Note that the corrective factor $\kappa_{\sigma}$ is invariant
+under dilation and rotation.
 
-
-\section{Littlewood-Paley condition}
-
-The rotations and dilations of the mother wavelet form an overcomplete basis or frame of $L^2(\mathbb{R}^d)$
-(finite-energy functions in $d$ dimensions, including all audio signals, CT scans, etc.) But in practice we can only
-choose a finite amount of wavelets of dilations $\left\{ a^j \right\}_{j = 0, 1, \dots, J}$ and orientations $r \in R$.
-How can we still make sure we capture all relevant information in the signal?
-To capture the low frequency information (at scales $a^j$ with $j > J$), we add a low-pass filter of
-length scale $J$ to our set of wavelets, which we denote by $\phi_J(\bm{x})$ and take to be a Gaussian in practice.
-The rotations $r$ must be chosen to discretize the rotation group in $\mathbb{R}^d$, which is not trivial in $\mathbb{R}^3$.
-To check if we have indeed covered the whole frequency space, our wavelets must satisfy the Littlewood-Paley condition
+We choose the normalisation factor of the mother wavelet $\mathcal{N}$,
+in order to be able satisfy \autoref{eq:lp_condition}, as the maximum of the \enquote{raw} Littlewood-Paley
+sum (which excludes the contribution of the low-pass filter)
 \begin{equation}
-  (1 - \epsilon) \leq A(\bm{\omega}) \leq 1 \qquad \forall \bm{\omega} \in \mathbb{R}^d
+  \mathcal{N} = \max_{\bm{\omega}} \frac{1}{2} \sum_{j \leq J} \sum_{r \in R}
+  \left( \left| \hat{\psi}_{a^j, r}(\bm{\omega}) \right|^2 + \left| \hat{\psi}_{a^j, r}(\bm{-\omega}) \right|^2
+  \right).
 \end{equation}
-with
-\begin{equation}
-  A(\bm{\omega}) = \left| \hat{\phi}(\bm{\omega}) \right|^2 + \frac{1}{2} \sum_{j \leq J} \sum_{r \in R}
-  \left( \left| \hat{\psi}_{a^j, r}(\bm{\omega}) \right|^2 + \left| \hat{\psi}_{a^j, r}(\bm{-\omega}) \right|^2 \right)
+
+
+\section{Discretizing $SO(3)$}
+
+We still need to specify which rotations we will use to build our filter bank, and, consequently, what the correct
+values of $\xi$ and $\sigma$ are to satisfy \autoref{eq:lp_condition}. Thanks to the Morlet wavelet having a real
+Fourier transform and our CT images being real, we only have to choose a finite number of positive rotations so that our
+scaled and rotated wavelets cover (are non-zero) on as much of the frequencies
+\begin{equation}\label{eq:positive_halfspace}
+(\omega_x, \omega_y, \omega_z) \qquad 0 < \omega_x < \pi, -\pi < \omega_y, \omega_z < \pi
 \end{equation}
-and $\epsilon$ small.
+where $\pi$ is the Nyquist frequency in radians (equal to $N/2$ for an $N \times N \times N$ image). In practice, we can
+impose the additional constraint
+\begin{equation}\label{eq:freq_ball}
+    \omega_{x}^2 + \omega_{y}^2 + \omega_{z}^2 \leq \pi^2
+\end{equation}
+since we don't care so much about the highest possible frequencies in the signal (they are very small anyway).
+
+A scaled and rotated wavelet has Fourier support around $\bm{\omega_c} = a^{-j}r\bm{\xi}$ with bandwidth $b_{a^j} =
+a^{-j}b$. Hence, because $\bm{\xi} \propto (1, 0, 0)$ and we essentially want to cover the half-ball described by
+\autoref{eq:positive_halfspace} and \autoref{eq:freq_ball}, we should choose our rotations $r$ such that they map the
+unit vector $(1, 0, 0)$ onto $n$ points on the hemisphere with north pole $(1, 0, 0)$ such that the pairwise distance in
+$\mathbb{R}^3$ is maximal (i.e. they are \enquote{evenly spread out} across the hemisphere).
+
+Placing our points on the corners of a platonic solid is ideal, but only works for at most 10 points (the regular
+dodecahedron). For a solution for general $n$, I have used the Fibonacci lattice, which distributes $n$ points to
+maximize their distance \emph{along the sphere} in an approximately optimal way, but this should be a good approximation
+to the problem at hand when to number of points is large.
 
 
-\chapter{Implementation details}
 
-\section{Normalization of filter bank}
+\appendix
+
+\chapter{Fast implementation}
 
 \section{Downsampling in the Fourier domain}
 I downsample in the Fourier domain by a factor $2^j$ by simply setting to zero all frequencies
