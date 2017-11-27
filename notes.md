@@ -6,6 +6,25 @@ parts can be like finding a needle in a haystack. Our quest is to build a
 representation that is sparse, while being invariant to some things intra-class
 differences, yet remains sensitive to other things.
 
+Machine learning, and especially deep learning, has made enormous steps in the past
+decade doing exactly this: its classification rates on a wide variety of tasks are astonishing,
+easily outperforming many "hand-crafted" algorithms.
+
+However, nobody really knows what these deep neural networks are doing, and
+tuning them takes significant expertise. Furthermore, medical images are
+high-dimensional, training data is scarce and there is not always a clearly
+defined ground truth -- huge limitations for learning models.
+
+What I have tried here is to use a different approach, namely one where no model
+is trained for feature extraction, but which uses an image representation called
+the scattering transform, that is known to have certain desirable properties,
+namely it preserves high-frequency information, is translation invariant over a
+tunable window and stable to deformations. This image representation may, in
+association with a simple classifier like an SVM, be used in classification and
+detection problems.
+
+I will start with a general introduction of signal processing, 
+
 In this introduction, we will start with considering 1D and 2D signals: sound
 and 2D image signals, respectively.
 
@@ -43,3 +62,7 @@ This is one of the reasons for the creation of the wavelet transform and
 multiresolution analysis, which can give good time resolution for high-frequency
 events and good frequency resolution for low-frequency events, the combination
 best suited for many real signals.
+
+Good! But now we still want our properties stated in the beginning, namely translational invariance,
+and stability to deformations. I will now define a representation that has all these properties,
+but first let me give a visualisation of it.
