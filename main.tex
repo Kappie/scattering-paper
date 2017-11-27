@@ -9,7 +9,7 @@
 
 \bibliography{references}
 
-\title{Mijn titel}
+\title{Scattering representation}
 \author{Geert Kapteijns}
 \date{\today}
 
@@ -65,7 +65,7 @@ attain super-expert performance).
 I will in the briefest possible way state what the scattering transform is. For details
 refer to \cite{anden2014deep, bruna2013invariant}.
 
-A wavelet transform is defined by convolving a signal $d$-dimensional $y(\bm{x})$ with scaled and rotated versions of a
+A wavelet transform is defined by convolving a $d$-dimensional signal $y(\bm{x})$ with scaled and rotated versions of a
 mother wavelet $\psi_{a^j, r}(\bm{x})$, with $j \in \mathbb{Z}$ and rotations $r \in SO(d)$ (rotation group in $d$
 dimensions). $d = 3$ in our case, since we are dealing with 3D images. $a = 2$ is common for image analysis. We will
 describe in the next section which mother wavelet we use in practice, and how to correctly choose a finite number of
@@ -174,10 +174,10 @@ a^{-j}r\bm{\xi}$ with bandwidth $b_{a^j} = a^{-j}b$. Note that the corrective fa
 under dilation and rotation.
 
 We choose the normalisation factor of the mother wavelet $\mathcal{N}$,
-in order to be able satisfy \autoref{eq:lp_condition}, as the maximum of the \enquote{raw} Littlewood-Paley
+in order to be able satisfy \autoref{eq:lp_condition}, as the inverse of the maximum of the \enquote{raw} Littlewood-Paley
 sum (which excludes the contribution of the low-pass filter)
 \begin{equation}
-  \mathcal{N} = \max_{\bm{\omega}} \frac{1}{2} \sum_{j \leq J} \sum_{r \in R}
+  \mathcal{N}^{-1} = \max_{\bm{\omega}} \frac{1}{2} \sum_{j \leq J} \sum_{r \in R}
   \left( \left| \hat{\psi}_{a^j, r}(\bm{\omega}) \right|^2 + \left| \hat{\psi}_{a^j, r}(\bm{-\omega}) \right|^2
   \right).
 \end{equation}
@@ -192,7 +192,7 @@ scaled and rotated wavelets cover (are non-zero) on as much of the frequencies
 \begin{equation}\label{eq:positive_halfspace}
 (\omega_x, \omega_y, \omega_z) \qquad 0 < \omega_x < \pi, -\pi < \omega_y, \omega_z < \pi
 \end{equation}
-where $\pi$ is the Nyquist frequency in radians (equal to $N/2$ for an $N \times N \times N$ image). In practice, we can
+as possible, where $\pi$ is the Nyquist frequency in radians (equal to $N/2$ for an $N \times N \times N$ image). In practice, we can
 impose the additional constraint
 \begin{equation}\label{eq:freq_ball}
     \omega_{x}^2 + \omega_{y}^2 + \omega_{z}^2 \leq \pi^2
