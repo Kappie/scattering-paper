@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/W32TeX) (preloaded format=pdflatex 2017.11.14)  30 NOV 2017 16:27
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/W32TeX) (preloaded format=pdflatex 2017.11.14)  30 NOV 2017 16:54
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1007,13 +1007,10 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 218.
 
 
-LaTeX Warning: Citation 'elastix' on page 3 undefined on input line 225.
-
-
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [3]
-<hemisphere_slice.png, id=107, 128.48pt x 256.96pt>
+<hemisphere_slice.png, id=116, 128.48pt x 256.96pt>
 File: hemisphere_slice.png Graphic file (type png)
 <use hemisphere_slice.png>
 Package pdftex.def Info: hemisphere_slice.png  used on input line 238. on input
@@ -1021,25 +1018,29 @@ Package pdftex.def Info: hemisphere_slice.png  used on input line 238. on input
 Package pdftex.def Info: Requested size: 137.7014pt x 275.42282pt on input line
  238.
 
+
+LaTeX Warning: Citation 'bruna2013scattering' on page 4 undefined on input line
+ 250.
+
 [4 <./hemisphere_slice.png>]
-Underfull \hbox (badness 2027) in paragraph at lines 326--326
+Underfull \hbox (badness 2027) in paragraph at lines 339--339
 []\OT1/cmr/m/n/10 V. Lostanlen. [On-line; ac-cessed 30 Novem-
  []
 
 
-Underfull \hbox (badness 1308) in paragraph at lines 326--326
+Underfull \hbox (badness 1308) in paragraph at lines 339--339
 \OT1/cmr/m/n/10 ber 2017]. \OT1/cmr/m/sc/10 url\OT1/cmr/m/n/10 : []$\OT1/cmtt/m
 /n/10 https : / / github . com /
  []
 
 [5]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 327.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 327.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 340.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 340.
  (./main.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 327.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 327.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 340.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 340.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: E138D0789D0F7D244DB1DBA4561CCDBC;584.
+(rerunfilecheck)             Checksum: E9F6E333CFD630D8BCC87CFC46D176C8;732.
 
 
 LaTeX Warning: There were undefined references.
@@ -1054,10 +1055,10 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 17198 strings out of 492985
- 276431 string characters out of 6136283
- 754458 words of memory out of 5000000
- 20534 multiletter control sequences out of 15000+600000
+ 17205 strings out of 492985
+ 276572 string characters out of 6136283
+ 756485 words of memory out of 5000000
+ 20538 multiletter control sequences out of 15000+600000
  19699 words of font info for 73 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  45i,14n,45p,1805b,1207s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1083,10 +1084,10 @@ st/fonts/type1/public/amsfonts/cm/cmti10.pfb><c:/texlive/2017/texmf-dist/fonts/
 type1/public/amsfonts/cm/cmtt10.pfb><c:/texlive/2017/texmf-dist/fonts/type1/pub
 lic/amsfonts/symbols/msbm10.pfb><c:/texlive/2017/texmf-dist/fonts/type1/public/
 amsfonts/symbols/msbm7.pfb>
-Output written on main.pdf (5 pages, 298933 bytes).
+Output written on main.pdf (5 pages, 301444 bytes).
 PDF statistics:
- 238 PDF objects out of 1000 (max. 8388607)
- 202 compressed objects within 3 object streams
- 47 named destinations out of 1000 (max. 500000)
- 86 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 248 PDF objects out of 1000 (max. 8388607)
+ 212 compressed objects within 3 object streams
+ 50 named destinations out of 1000 (max. 500000)
+ 102 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -240,11 +240,24 @@ an example of an input affected hemisphere.
   \label{fig:input_hemisphere}
 \end{figure}
 
+\section{Scattering parameters}
+
+For the classification experiment, I used $\xi = \frac{4\pi}{5}$ and $\sigma =
+0.0129$ for the mother wavelet, and constructed a filter bank for $J = 4$ and
+using rotations that map the vector $(1, 0, 0)$ onto 20 upper-hemisphere points
+of the Fibonacci lattice. This satisfies the Littlewood-Paley condition
+\autoref{eq:lp_condition} with $\epsilon = 0.92$ and an average deficiency
+$\epsilon_{\mathrm{avg}} = 0.29$. This is a lot worse than \cite{bruna2013scattering}
+obtains for experiments in 2D, but it is to me unclear what can be done to obtain a better coverage
+of Fourier space in 3D.
+
+\section{Support vector machine classifier}
+
 I selected the SVM that had the highest precision on 80\% of the dataset (with
 equal number of samples per class) with five-fold cross validation, from a set of linear SVMs with
 regularisation paramater $C \in \{1, 10, 100, 1000\}$ and Gaussian radial basis function kernel SVMS with
 the same $C$ and $\gamma \in \{ 10^{-3}, 10^{-4}, 10^{-5}, 10^{-6} \}$. The Gaussian kernel SVM with $C = 10$ and $\gamma = 10^{-5}$
-performed the best with 80\% precision on the training set. It obtained a 73\% precision on the remaining 20\% of the dataset.
+performed the best with 80\% precision on the training set. It obtained a \textbf{73\% precision} on the remaining 20\% of the dataset.
 
 \chapter{Discussion}
 

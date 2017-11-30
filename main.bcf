@@ -1926,11 +1926,12 @@
     <bcf:citekey order="1">anden2014deep</bcf:citekey>
     <bcf:citekey order="1">bruna2013invariant</bcf:citekey>
     <bcf:citekey order="2">elastix</bcf:citekey>
-    <bcf:citekey order="3">bruna2013invariant</bcf:citekey>
-    <bcf:citekey order="3">mallat2012group</bcf:citekey>
-    <bcf:citekey order="4">bruna2013</bcf:citekey>
-    <bcf:citekey order="5">bruna2013invariant</bcf:citekey>
-    <bcf:citekey order="6">ifftmultiply</bcf:citekey>
+    <bcf:citekey order="3">bruna2013scattering</bcf:citekey>
+    <bcf:citekey order="4">bruna2013invariant</bcf:citekey>
+    <bcf:citekey order="4">mallat2012group</bcf:citekey>
+    <bcf:citekey order="5">bruna2013</bcf:citekey>
+    <bcf:citekey order="6">bruna2013invariant</bcf:citekey>
+    <bcf:citekey order="7">ifftmultiply</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">
