@@ -1,0 +1,164 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 2.9 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global}
+    \entry{anden2014deep}{article}{}
+      \name{author}{2}{}{%
+        {{hash=8d3943fe655bc0217bbe820356ae5761}{%
+           family={And\'{e}n},
+           familyi={A\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=e3463b4359cc5ddeee20fc599a7d2e05}{%
+           family={Mallat},
+           familyi={M\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{11bcd1fafd673145a28ed7e9c7745df3}
+      \strng{fullhash}{11bcd1fafd673145a28ed7e9c7745df3}
+      \strng{bibnamehash}{11bcd1fafd673145a28ed7e9c7745df3}
+      \strng{authorbibnamehash}{11bcd1fafd673145a28ed7e9c7745df3}
+      \strng{authornamehash}{11bcd1fafd673145a28ed7e9c7745df3}
+      \strng{authorfullhash}{11bcd1fafd673145a28ed7e9c7745df3}
+      \field{sortinit}{A}
+      \field{sortinithash}{d77c7cdd82ff690d4c3ef13216f92f0b}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1053-587X}
+      \field{journaltitle}{IEEE Transactions on Signal Processing}
+      \field{month}{8}
+      \field{number}{16}
+      \field{title}{Deep Scattering Spectrum}
+      \field{volume}{62}
+      \field{year}{2014}
+      \field{pages}{4114\bibrangedash 4128}
+      \range{pages}{15}
+      \verb{doi}
+      \verb 10.1109/TSP.2014.2326991
+      \endverb
+      \keyw{acoustic wave scattering;amplitude modulation;audio signal processing;cepstral analysis;signal classification;signal representation;GTZAN database;MFCC;TIMIT database;audio classification;deep scattering spectrum;frequency transposition invariant representation;mel-frequency cepstral coefficients;modulus operators;musical genre;phone classification;scattering transform;second-order scattering coefficients;spectrum coefficients;time-warping deformation;transient phenomena;wavelet convolutions;Convolution;Frequency modulation;Scattering;Spectrogram;Wavelet analysis;Wavelet transforms;Audio classification;MFCC;deep neural networks;modulation spectrum;wavelets}
+    \endentry
+    \entry{bruna2013invariant}{article}{}
+      \name{author}{2}{}{%
+        {{hash=ffabbc737cb02c4b3983a96bb1551c12}{%
+           family={Bruna},
+           familyi={B\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=e3463b4359cc5ddeee20fc599a7d2e05}{%
+           family={Mallat},
+           familyi={M\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{0292adaf7c117407656342546e5c0f66}
+      \strng{fullhash}{0292adaf7c117407656342546e5c0f66}
+      \strng{bibnamehash}{0292adaf7c117407656342546e5c0f66}
+      \strng{authorbibnamehash}{0292adaf7c117407656342546e5c0f66}
+      \strng{authornamehash}{0292adaf7c117407656342546e5c0f66}
+      \strng{authorfullhash}{0292adaf7c117407656342546e5c0f66}
+      \field{sortinit}{B}
+      \field{sortinithash}{276475738cc058478c1677046f857703}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0162-8828}
+      \field{journaltitle}{IEEE Transactions on Pattern Analysis and Machine Intelligence}
+      \field{month}{8}
+      \field{number}{8}
+      \field{title}{Invariant Scattering Convolution Networks}
+      \field{volume}{35}
+      \field{year}{2013}
+      \field{pages}{1872\bibrangedash 1886}
+      \range{pages}{15}
+      \verb{doi}
+      \verb 10.1109/TPAMI.2012.230
+      \endverb
+      \keyw{Gaussian processes;convolution;handwritten character recognition;image classification;image representation;image texture;principal component analysis;support vector machines;wavelet transforms;Fourier power spectrum;Gaussian kernel SVM;SIFT-type descriptors;averaging operators;complementary invariant information;deep convolution networks;deformations;generative PCA classifier;handwritten digits;high-frequency information;invariant scattering convolution networks;mathematical analysis;network layer;nonlinear modulus;scattering representation;state-of-the-art classification;stationary process;texture discrimination;translation invariant image representation;wavelet scattering network;wavelet transform convolutions;Computer architecture;Convolution;Fourier transforms;Scattering;Wavelet coefficients;Classification;convolution networks;deformations;invariants;wavelets}
+    \endentry
+    \entry{ifftmultiply}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=2c274a15454683891717ffd9d54c7e19}{%
+           family={Lostanlen},
+           familyi={L\bibinitperiod},
+           given={V.},
+           giveni={V\bibinitperiod}}}%
+      }
+      \strng{namehash}{2c274a15454683891717ffd9d54c7e19}
+      \strng{fullhash}{2c274a15454683891717ffd9d54c7e19}
+      \strng{bibnamehash}{2c274a15454683891717ffd9d54c7e19}
+      \strng{authorbibnamehash}{2c274a15454683891717ffd9d54c7e19}
+      \strng{authornamehash}{2c274a15454683891717ffd9d54c7e19}
+      \strng{authorfullhash}{2c274a15454683891717ffd9d54c7e19}
+      \field{sortinit}{L}
+      \field{sortinithash}{2c7981aaabc885868aba60f0c09ee20f}
+      \field{labelnamesource}{author}
+      \field{note}{[Online; accessed 30 November 2017]}
+      \verb{urlraw}
+      \verb "https://github.com/lostanlen/scattering.m/blob/master/lib/convolution/ifft_multiply.m"
+      \endverb
+      \verb{url}
+      \verb https://github.com/lostanlen/scattering.m/blob/master/lib/convolution/ifft_multiply.m
+      \endverb
+    \endentry
+    \entry{mallat2012group}{article}{}
+      \name{author}{1}{}{%
+        {{hash=93acb60ca3bf79665bd7c1c41fb6ffba}{%
+           family={Mallat},
+           familyi={M\bibinitperiod},
+           given={St\'{e}phane},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Wiley Subscription Services, Inc., A Wiley Company}%
+      }
+      \strng{namehash}{93acb60ca3bf79665bd7c1c41fb6ffba}
+      \strng{fullhash}{93acb60ca3bf79665bd7c1c41fb6ffba}
+      \strng{bibnamehash}{93acb60ca3bf79665bd7c1c41fb6ffba}
+      \strng{authorbibnamehash}{93acb60ca3bf79665bd7c1c41fb6ffba}
+      \strng{authornamehash}{93acb60ca3bf79665bd7c1c41fb6ffba}
+      \strng{authorfullhash}{93acb60ca3bf79665bd7c1c41fb6ffba}
+      \field{sortinit}{M}
+      \field{sortinithash}{cfd219b90152c06204fab207bc6c7cab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1097-0312}
+      \field{journaltitle}{Communications on Pure and Applied Mathematics}
+      \field{number}{10}
+      \field{title}{Group Invariant Scattering}
+      \field{volume}{65}
+      \field{year}{2012}
+      \field{pages}{1331\bibrangedash 1398}
+      \range{pages}{68}
+      \verb{doi}
+      \verb 10.1002/cpa.21413
+      \endverb
+      \verb{urlraw}
+      \verb http://dx.doi.org/10.1002/cpa.21413
+      \endverb
+      \verb{url}
+      \verb http://dx.doi.org/10.1002/cpa.21413
+      \endverb
+    \endentry
+  \enddatalist
+  \missing{bruna2013}
+\endrefsection
+\endinput
+

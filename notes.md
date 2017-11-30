@@ -23,7 +23,7 @@ tunable window and stable to deformations. This image representation may, in
 association with a simple classifier like an SVM, be used in classification and
 detection problems.
 
-I will start with a general introduction of signal processing, 
+I will start with a general introduction of signal processing,
 
 In this introduction, we will start with considering 1D and 2D signals: sound
 and 2D image signals, respectively.

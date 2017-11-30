@@ -1,13 +1,19 @@
 \documentclass[twocolumn, openany, oneside, article]{memoir}
 
-\usepackage[style=numeric-comp, backend=biber]{biblatex}
+\usepackage[style=numeric-comp, backend=biber, bibencoding=utf8]{biblatex}
 \usepackage{bm}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{csquotes}
+\usepackage[noline, ruled]{algorithm2e}
+\usepackage{graphicx}
 \usepackage{hyperref}
 
 \bibliography{references}
+
+
+\DeclareMathOperator{\ifft}{ifft}
+\DeclareMathOperator{\fft}{fft}
 
 \title{Scattering representation}
 \author{Geert Kapteijns}
@@ -35,12 +41,12 @@ research efforts of the last three months accessible. I have made no huge effort
 to cite the first paper to establish a concept or even to cite well-established
 results at all.
 
-The challenge at hand is, in the broadest sense, to use statistical models and computational power to improve outcome
-for ischemic stroke patients. This note focuses on using image data to aid radiologists in the process of deciding, in
+This research is part of a broader effort to use image data to aid radiologists in the process of deciding, in
 the earliest possible stage, whether to use intra-arterial therapy (a relatively new endovascular, catheter-based
-treatment.)
+treatment) to treat ischemic stroke patients.
+I have limited my study to classifying brain hemispheres as being affected by stroke or not, thereby finding image features in 3D NCCT scans that are relevant for this decision.
 
-I have limited my study to finding image features in 3D NCCT scans that are relevant for this decision. I believe that,
+I believe that,
 despite popularity and exceptional engineering results in many areas (easily outperforming \enquote{hand-crafted}
 algorithms), deep learning is not the best tool for this problem (and I suspect many other problems in the medical
 domain), because medical images are high-dimensional, training data is scarce and there is not always a clearly defined
@@ -51,15 +57,13 @@ which uses an image representation called the scattering transform, that is know
 e.g. it preserves high-frequency information, is translation invariant over a tunable window and stable to deformations.
 This image representation may, in association with a simple classifier like an SVM, be used in classification problems.
 
-In the classification experiments, I have chosen to focus on classifying brain hemispheres as being unaffected or
-affected by stroke, using the MRCLEAN registry. While this is not a clinically relevant problem (classifying which
-hemispheres is affected is a trivial task in most cases?) it serves as a test for the scattering representation, as at
+While detecting which brain hemisphere is affected by stroke is not clinically a very relevant problem (
+it can, in most cases, be deducted from the symptoms of the patient) it serves as a test for the scattering representation in 3D, as at
 least there is an unequivocal ground truth. Though not done in this work, the learned features may be visualised to aid
 radiologists in giving an ASPECTS score or otherwise diagnosing the seriousness of the stroke. It is also possible, if a
 good delineation of the ASPECTS regions is available, to directly train a classifier on the scattering representation of
 these regions (though expert's opinion on whether a region is affected or not is not unequivocal, making it difficult to
 attain super-expert performance).
-
 
 \chapter{Scattering transform}
 I will in the briefest possible way state what the scattering transform is. For details
@@ -186,7 +190,7 @@ sum (which excludes the contribution of the low-pass filter)
 \section{Discretizing $SO(3)$}
 
 We still need to specify which rotations we will use to build our filter bank, and, consequently, what the correct
-values of $\xi$ and $\sigma$ are to satisfy \autoref{eq:lp_condition}. Thanks to the Morlet wavelet having a real
+values of $\xi$ and $b$ are to satisfy \autoref{eq:lp_condition}. Thanks to the Morlet wavelet having a real
 Fourier transform and our CT images being real, we only have to choose a finite number of positive rotations so that our
 scaled and rotated wavelets cover (are non-zero) on as much of the frequencies
 \begin{equation}\label{eq:positive_halfspace}
@@ -211,21 +215,68 @@ maximize their distance \emph{along the sphere} in an approximately optimal way,
 to the problem at hand when to number of points is large.
 
 
+\section{Choosing $\xi$ and $b$}
+
+
+\chapter{Experiment on NCCT baseline scans}
+
+I used NCCT data from the MRCLEAN registry. To obtain 3D pictures of the brain
+hemispheres, I performed a rigid transform onto an \enquote{atlas} (a perfectly
+aligned model image) using the Elastix library \cite{elastix}, then used a
+region-growing algorithm to select only the pixels that belonged to brain
+tissue, then separated the hemisperes by cutting over the y-axis and finally
+resampled the image to dimensions $(128, 256, 128)$, to avoid having to zero-pad
+before doing the scattering transform.
+
+I manually checked the center slices of the registered images and removed images
+for which rigid registration failed for some reason. I also removed patients
+with signs of earlier stroke. In this way, I selected 150 brain scans, yielding
+a dataset with 150 samples in each class. See \autoref{fig:input_hemisphere} for
+an example of an input affected hemisphere.
+
+\begin{figure}
+  \includegraphics[width=0.6\linewidth]{hemisphere_slice}
+  \caption{Axial slice of an input image of an affected brain.}
+  \label{fig:input_hemisphere}
+\end{figure}
+
+I selected the SVM that had the highest precision on 80\% of the dataset (with
+equal number of samples per class) with five-fold cross validation, from a set of linear SVMs with
+regularisation paramater $C \in \{1, 10, 100, 1000\}$ and Gaussian radial basis function kernel SVMS with
+the same $C$ and $\gamma \in \{ 10^{-3}, 10^{-4}, 10^{-5}, 10^{-6} \}$. The Gaussian kernel SVM with $C = 10$ and $\gamma = 10^{-5}$
+performed the best with 80\% precision on the training set. It obtained a 73\% precision on the remaining 20\% of the dataset.
+
+\chapter{Discussion}
+
 
 \appendix
 
 \chapter{Fast implementation}
 
-\section{Downsampling in the Fourier domain}
-I downsample in the Fourier domain by a factor $2^j$ by simply setting to zero all frequencies
-outside the range $[-\frac{\pi}{2^j}, \frac{\pi}{2^j}]$ in each dimension. This ideal low-pass filter corresponds to a
-convolution with a normalized sinc-filter in the spatial domain.
+In this appendix, I will outline some straightforward steps to speed up the
+numerical implementation of the scattering transform, which is especially
+necessary in 3D.
 
-For a discrete-time signal $x[n]$, the Fourier transform is
-\begin{equation}
-  X[\omega] = \sum_{n = -\infty}^{\infty} x[n] e^{-i\omega n}.
-\end{equation}
-Downsampling the spatial signal $x$ by a factor $D$, i.e.
+Most of the energy is contained in the first two layers of the scattering
+transform, and especially in the subset of propagated signals with $j_1 < j_2$
+\cite{bruna2013invariant, mallat2012group} (this is a typo in \cite{bruna2013}
+under the header \enquote{Fast Scattering Computations}, which says $j_1 \leq
+j_2$). I therefore only compute these paths in the implementation.
+Furthermore, signals that have been convolved with a filter at scale $a^j$,
+contain mostly frequencies below $\pi a^{-j}$, so can be safely downsampled by a factor $a^j$.
+(This also is true for the scattering coefficients $U[p] \star \phi_{a^J}$, which can be downsampled by a factor
+$a^J$ at all layers.)
+
+To implement the actual convolutions, it is of vital importance to perform them
+as a product in the Fourier domain (per the convolution theorem). It is therefore efficient to contstruct
+the filter bank in the Fourier domain and to keep downsampled versions in memory. Because we only
+consider the subset of paths with $j_1 < j_2$, we need a wavelet of length scale $a^j$ downsampled at
+scales $a, a^{2}, \dots a^{j-1}$. See \autoref{algorithm:filterbank}.
+
+For pseudocode for the scattering transform, see \cite{bruna2013invariant}.
+To compute signals $|y \star \psi_{a^j, r}|$, it is more efficient to downsample in the Fourier domain,
+since that saves time in the inverse Fourier transformation, see \autoref{algorithm:scattering_operator}.
+The equivalent of downsampling a spatial signal by a factor $D$, i.e.
 \begin{equation}
   x_D[n] = x[Dn]
 \end{equation}
@@ -233,6 +284,39 @@ corresponds in the Fourier domain to
 \begin{equation}
   X_D[\omega] = \frac{1}{D}\sum_{k=0}^{D-1}X(\frac{\omega - 2 \pi k}{D}).
 \end{equation}
+Note that both the construction of the filter bank and the scattering operations can be sped up
+by performing them with a GPU.
+
+A final thing that might be attempted is to speed up elementwise multiplication
+in the Fourier domain by cropping the filters $\hat{\psi}_{a^j, r}$, see \cite{ifftmultiply}
+for a code example in 1D.
+
+\begin{algorithm}
+\For{$0 \leq j \leq J$ and $r \in R$}{
+  construct $\hat{\psi}_{a^j, r}(\bm{\omega})$\;
+  \For{$j' \in \{1, \dots, j-1\}$}{
+    downsample $\hat{\psi}_{a^j, r}(\bm{\omega})$ by factor $a^{j'}$\;
+  }
+}
+construct $\hat{\phi}_{a^J}(\bm{\omega})$\;
+\For{$j \in \{1, \dots, J\}$}{
+  downsample $\hat{\phi}_{a^J}(\bm{\omega})$ by factor $a^j$\;
+}
+\caption{Constructing the wavelet filter bank.}\label{algorithm:filterbank}
+\end{algorithm}
+
+\begin{algorithm}
+  \SetKwInOut{Input}{Input}
+  \SetKwInOut{Output}{Output}
+  \Input{Fourier transforms $\hat{y}$ and $\hat{\psi}_{a^j, r}$.}
+  Compute elementwise product $\hat{y} \cdot \hat{\psi}_{a^j, r}$\;
+  Downsample $\hat{y} \cdot \hat{\psi}_{a^j, r}$ by factor $a^j$\;
+  $y \star \psi_{a^j, r} \leftarrow \ifft(\hat{y} \cdot \hat{\psi}_{a^j, r})$\;
+  Compute $|y \star \psi_{a^j, r}|$\;
+  Compute $\fft(|y \star \psi_{a^j, r}|)$ for extracting scattering coefficients and next layer's transform\;
+  \caption{Computing $|y \star \psi_{a^j, r}|$.}\label{algorithm:scattering_operator}
+\end{algorithm}
+
 
 
 
@@ -241,3 +325,7 @@ corresponds in the Fourier domain to
 \printbibliography
 
 \end{document}
+
+% I downsample in the Fourier domain by a factor $2^j$ by simply setting to zero all frequencies
+% outside the range $[-\frac{\pi}{2^j}, \frac{\pi}{2^j}]$ in each dimension. This ideal low-pass filter corresponds to a
+% convolution with a normalized sinc-filter in the spatial domain.

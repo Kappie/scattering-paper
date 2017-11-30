@@ -8,7 +8,7 @@
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>input_encoding</bcf:key>
-      <bcf:value>ascii</bcf:value>
+      <bcf:value>utf8</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>debug</bcf:key>
@@ -1925,6 +1925,12 @@
   <bcf:section number="0">
     <bcf:citekey order="1">anden2014deep</bcf:citekey>
     <bcf:citekey order="1">bruna2013invariant</bcf:citekey>
+    <bcf:citekey order="2">elastix</bcf:citekey>
+    <bcf:citekey order="3">bruna2013invariant</bcf:citekey>
+    <bcf:citekey order="3">mallat2012group</bcf:citekey>
+    <bcf:citekey order="4">bruna2013</bcf:citekey>
+    <bcf:citekey order="5">bruna2013invariant</bcf:citekey>
+    <bcf:citekey order="6">ifftmultiply</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">
