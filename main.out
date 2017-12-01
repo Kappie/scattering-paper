@@ -5,8 +5,9 @@
 \BOOKMARK [1][-]{section.3.2}{Discretizing SO\(3\)}{chapter.3}% 5
 \BOOKMARK [1][-]{section.3.3}{Choosing \040and b}{chapter.3}% 6
 \BOOKMARK [0][-]{chapter.4}{Experiment on NCCT baseline scans}{}% 7
-\BOOKMARK [1][-]{section.4.1}{Scattering parameters}{chapter.4}% 8
-\BOOKMARK [1][-]{section.4.2}{Support vector machine classifier}{chapter.4}% 9
-\BOOKMARK [0][-]{chapter.5}{Discussion}{}% 10
-\BOOKMARK [0][-]{appendix.A}{Fast implementation}{}% 11
-\BOOKMARK [0][-]{section*.2}{References}{}% 12
+\BOOKMARK [1][-]{section.4.1}{Support vector machine classifier}{chapter.4}% 8
+\BOOKMARK [0][-]{chapter.5}{Discussion}{}% 9
+\BOOKMARK [1][-]{section.5.1}{Further research}{chapter.5}% 10
+\BOOKMARK [1][-]{section.5.2}{Acknowledgements}{chapter.5}% 11
+\BOOKMARK [0][-]{section*.3}{References}{}% 12
+\BOOKMARK [0][-]{appendix.A}{Fast implementation}{}% 13

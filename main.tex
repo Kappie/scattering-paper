@@ -7,6 +7,8 @@
 \usepackage{csquotes}
 \usepackage[noline, ruled]{algorithm2e}
 \usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 \usepackage{hyperref}
 
 \bibliography{references}
@@ -25,12 +27,17 @@
 
 \begin{abstract}
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Inspired by \cite{adel2017scattering}, I attempt to use the 3D scattering
+representation to classify baseline NCCT images of brain hemispheres of ischemic
+stroke patients into the classes \enquote{affected} and \enquote{unaffected} by
+stroke. I achieve 73\% precision using a Gaussian radial basis function kernel SVM.
+
+I introduce a method to discretize $SO(3)$, based on a Fibonacci lattice, to construct a filter bank
+that covers the frequency domain with as few filters as possible. I show that I am able to satisfy
+the Littlewood-Paley condition with $\epsilon = 0.92$ for filters of size $(128, 256, 128)$.
+Some pointers are given how this bound might be improved. Addionally, I explictly describe how to
+construct an appropriate mother wavelet and give an heuristic to decide on its hyperparameters. In the appendix,
+I discuss some steps to optimize the implementation of the scattering transform
 
 \end{abstract}
 
@@ -52,7 +59,7 @@ algorithms), deep learning is not the best tool for this problem (and I suspect 
 domain), because medical images are high-dimensional, training data is scarce and there is not always a clearly defined
 ground truth.
 
-What I have tried here is to use a different approach, namely one where no model is trained for feature extraction, but
+Following \cite{adel2017scattering}, what I have tried here is to use a different approach, namely one where no model is trained for feature extraction, but
 which uses an image representation called the scattering transform, that is known to have certain desirable properties,
 e.g. it preserves high-frequency information, is translation invariant over a tunable window and stable to deformations.
 This image representation may, in association with a simple classifier like an SVM, be used in classification problems.
@@ -67,7 +74,7 @@ attain super-expert performance).
 
 \chapter{Scattering transform}
 I will in the briefest possible way state what the scattering transform is. For details
-refer to \cite{anden2014deep, bruna2013invariant}.
+refer to \cite{anden2014deep, bruna2013invariant, bruna2013scattering}.
 
 A wavelet transform is defined by convolving a $d$-dimensional signal $y(\bm{x})$ with scaled and rotated versions of a
 mother wavelet $\psi_{a^j, r}(\bm{x})$, with $j \in \mathbb{Z}$ and rotations $r \in SO(d)$ (rotation group in $d$
@@ -217,6 +224,56 @@ to the problem at hand when to number of points is large.
 
 \section{Choosing $\xi$ and $b$}
 
+I initially followed the reasoning in
+\cite[Appendix~A]{lostanlen2017convolutional} adapted to symmetric wavelets to
+obtain $\xi = \frac{4\pi}{5}$ (which I used in the experiment, see below), but
+have since come to believe that, since  we only care about frequencies described
+by a half-ball in Fourier space, we should require that
+\begin{align}
+  b &= \pi - \xi,\\
+  b + \frac{b}{a} &= \xi - \frac{\xi}{a}.
+\end{align}
+The first equation is obtained by requiring
+that frequencies up until $|\bm{\omega}| = \pi$ should be covered, whereas the
+second equation says that there should be no gap (in support) between the
+topmost wavelet, which is centered at $\bm{\xi}$ with bandwidth $b$, and the
+first scaled wavelet, which is centered at $\bm{\xi}a^{-1}$ with bandwidth
+$ba^{-1}$.
+
+This yields
+\begin{align}
+  \xi &= \frac{\pi(a + 1)}{2a},\\
+  b &= \pi \left( 1 - \frac{a+1}{2a} \right),
+\end{align}
+which is equal to
+\begin{align}
+  \xi &= \frac{3\pi}{4},\\
+  b &= \frac{\pi}{4},
+\end{align}
+for $a = 2$. This is the same value for $\xi$ that is used in
+\cite{bruna2013invariant}, but a much smaller bandwidth, showing that
+practical limitations (i.e. how many rotations are feasible) are more important
+than this heuristic. The final arbiter should always be the Littlewood-Paley
+condition given by \autoref{eq:lp_condition} and classification results.
+
+
+\subsection{Satisfying the Littlewood-Paley condition}\label{subsec:lp_condition}
+For the classification experiment, I used $\xi = \frac{4\pi}{5}$ and $\sigma =
+0.0129$ for the mother wavelet of size $(128, 256, 128)$, and constructed a filter bank for $J = 4$ and
+using rotations that map the vector $(1, 0, 0)$ onto 20 upper-hemisphere points
+of the Fibonacci lattice. This satisfies the Littlewood-Paley condition
+\autoref{eq:lp_condition} with $\epsilon = 0.92$ and an average deficiency
+$\epsilon_{\mathrm{avg}} = 0.29$, where I have calculated the Littlewood-Paley sum
+only for frequencies a distance $2^J$ apart (for computational reasons).
+
+This value of $\sigma$ seems too small to be reasonable, but it is likely
+necessary to compensate for the poor coverage of the Fourier domain by only 20
+points of topmost frequency. The value of $\epsilon$ is correspondingly a lot
+worse than \cite{bruna2013scattering} obtains for experiments in 2D. More
+optimized code (to allow for more orientations) and further research is
+necessary to conclude whether it is feasible to construct a signal
+representation of 3D images of such size. See \autoref{appendix:a} for measures
+that might be taken to make the implementation fast.
 
 \chapter{Experiment on NCCT baseline scans}
 
@@ -240,17 +297,6 @@ an example of an input affected hemisphere.
   \label{fig:input_hemisphere}
 \end{figure}
 
-\section{Scattering parameters}
-
-For the classification experiment, I used $\xi = \frac{4\pi}{5}$ and $\sigma =
-0.0129$ for the mother wavelet, and constructed a filter bank for $J = 4$ and
-using rotations that map the vector $(1, 0, 0)$ onto 20 upper-hemisphere points
-of the Fibonacci lattice. This satisfies the Littlewood-Paley condition
-\autoref{eq:lp_condition} with $\epsilon = 0.92$ and an average deficiency
-$\epsilon_{\mathrm{avg}} = 0.29$. This is a lot worse than \cite{bruna2013scattering}
-obtains for experiments in 2D, but it is to me unclear what can be done to obtain a better coverage
-of Fourier space in 3D.
-
 \section{Support vector machine classifier}
 
 I selected the SVM that had the highest precision on 80\% of the dataset (with
@@ -261,10 +307,47 @@ performed the best with 80\% precision on the training set. It obtained a \textb
 
 \chapter{Discussion}
 
+The results are comparable to \cite{adel2017scattering}, and given the
+difficulty that professionals have in telling which brain hemispere is affected
+from image data alone, the result is not too bad. However, a first indication of classifying
+a downsampled version of the input data by raw pixels gives a precision of
+65\%-70\% (also comparable to the experiments in \cite{adel2017scattering}), so
+the scattering transform with current parameters does not give a significant
+improvement.
+
+\section{Further research}
+
+The MRCLEAN trial includes metadata indicating whether the radiologist could
+perform an ASPECTS scoring based on a comparison between brain hemispheres. It is interesting
+to compare the cases where the professional failed to distinguish between hemispheres and where
+the classifier failed to do so.
+
+As indicated in \autoref{subsec:lp_condition}, further research needs to be done on
+choosing the number of filters in the filter bank, $\xi$ and corresponding $b$. I
+assume that when some measures are taken to make the implementation more efficient,
+it might be possible to satisfy the Littlewood-Paley condition with smaller $\epsilon$.
+Another simpler measure which might be undertaken to improve classification results is
+to perform cross-validation on the maximum length scale $a^J$.
+
+When the scattering representation is somewhat under control, it might be worthwhile
+to use it as input of a deep neural network \cite{oyallon2017scaling}, or even as an
+initialisation of the first learnable layers.
+
+As separate research questions, it might be asked whether visualising the features (as is done
+for example in \cite{adel2017scattering}) can improve ASPECTS scoring by radiologists,
+perhaps in conjunction with directly classifying ASPECTS regions using the scattering representation.
+
+\section{Acknowledgements}
+I am grateful to Henk Marquering and Renan Sales Barros for giving me the opportunity to work on this project.
+Thanks to them and Ádám Hilbert and Elena Ponomareva for valuable discussions -- I hope you guys find time to
+continue with this project, perhaps on Friday afternoons.
+Finally, I thank Vincent Lostanlen for his great patience in sharing some of his expertise with me over the mail.
+
+\printbibliography
 
 \appendix
 
-\chapter{Fast implementation}
+\chapter{Fast implementation}\label{appendix:a}
 
 In this appendix, I will outline some straightforward steps to speed up the
 numerical implementation of the scattering transform, which is especially
@@ -326,7 +409,7 @@ construct $\hat{\phi}_{a^J}(\bm{\omega})$\;
   Downsample $\hat{y} \cdot \hat{\psi}_{a^j, r}$ by factor $a^j$\;
   $y \star \psi_{a^j, r} \leftarrow \ifft(\hat{y} \cdot \hat{\psi}_{a^j, r})$\;
   Compute $|y \star \psi_{a^j, r}|$\;
-  Compute $\fft(|y \star \psi_{a^j, r}|)$ for extracting scattering coefficients and next layer's transform\;
+  Compute $\fft(|y \star \psi_{a^j, r}|)$ for extracting scattering coefficients and computing next layer's transform\;
   \caption{Computing $|y \star \psi_{a^j, r}|$.}\label{algorithm:scattering_operator}
 \end{algorithm}
 
@@ -335,7 +418,6 @@ construct $\hat{\phi}_{a^J}(\bm{\omega})$\;
 
 
 
-\printbibliography
 
 \end{document}
 

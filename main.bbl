@@ -29,6 +29,58 @@
       \verb http://elastix.isi.uu.nl/
       \endverb
     \endentry
+    \entry{adel2017scattering}{article}{}
+      \name{author}{4}{}{%
+        {{hash=ef3a35058774218363d1a5d0597f150d}{%
+           family={Adel},
+           familyi={A\bibinitperiod},
+           given={Tameem},
+           giveni={T\bibinitperiod}}}%
+        {{hash=f9073aa7e4e4e473ab8161f05ad4b05f}{%
+           family={Cohen},
+           familyi={C\bibinitperiod},
+           given={Taco},
+           giveni={T\bibinitperiod}}}%
+        {{hash=52d8c35481ed98c52270e607d3ab324f}{%
+           family={Caan},
+           familyi={C\bibinitperiod},
+           given={Matthan},
+           giveni={M\bibinitperiod}}}%
+        {{hash=53d2880ad8047b61cdae2c6b2803e763}{%
+           family={Welling},
+           familyi={W\bibinitperiod},
+           given={Max},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{26109d181e18c514792cce83505c1b58}
+      \strng{fullhash}{f5525e05165567e22638d00661c9be04}
+      \strng{bibnamehash}{26109d181e18c514792cce83505c1b58}
+      \strng{authorbibnamehash}{26109d181e18c514792cce83505c1b58}
+      \strng{authornamehash}{26109d181e18c514792cce83505c1b58}
+      \strng{authorfullhash}{f5525e05165567e22638d00661c9be04}
+      \field{sortinit}{A}
+      \field{sortinithash}{d77c7cdd82ff690d4c3ef13216f92f0b}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{2213-1582}
+      \field{journaltitle}{NeuroImage: Clinical}
+      \field{number}{Supplement C}
+      \field{title}{3D scattering transforms for disease classification in neuroimaging}
+      \field{volume}{14}
+      \field{year}{2017}
+      \field{pages}{506\bibrangedash 517}
+      \range{pages}{12}
+      \verb{doi}
+      \verb https://doi.org/10.1016/j.nicl.2017.02.004
+      \endverb
+      \verb{urlraw}
+      \verb http://www.sciencedirect.com/science/article/pii/S2213158217300384
+      \endverb
+      \verb{url}
+      \verb http://www.sciencedirect.com/science/article/pii/S2213158217300384
+      \endverb
+      \keyw{Scattering representation,Feature extraction,MRI classification}
+    \endentry
     \entry{anden2014deep}{article}{}
       \name{author}{2}{}{%
         {{hash=8d3943fe655bc0217bbe820356ae5761}{%
@@ -65,6 +117,31 @@
       \verb 10.1109/TSP.2014.2326991
       \endverb
       \keyw{acoustic wave scattering;amplitude modulation;audio signal processing;cepstral analysis;signal classification;signal representation;GTZAN database;MFCC;TIMIT database;audio classification;deep scattering spectrum;frequency transposition invariant representation;mel-frequency cepstral coefficients;modulus operators;musical genre;phone classification;scattering transform;second-order scattering coefficients;spectrum coefficients;time-warping deformation;transient phenomena;wavelet convolutions;Convolution;Frequency modulation;Scattering;Spectrogram;Wavelet analysis;Wavelet transforms;Audio classification;MFCC;deep neural networks;modulation spectrum;wavelets}
+    \endentry
+    \entry{bruna2013scattering}{thesis}{}
+      \name{author}{1}{}{%
+        {{hash=ffabbc737cb02c4b3983a96bb1551c12}{%
+           family={Bruna},
+           familyi={B\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {Ecole Polytechnique X}%
+      }
+      \strng{namehash}{ffabbc737cb02c4b3983a96bb1551c12}
+      \strng{fullhash}{ffabbc737cb02c4b3983a96bb1551c12}
+      \strng{bibnamehash}{ffabbc737cb02c4b3983a96bb1551c12}
+      \strng{authorbibnamehash}{ffabbc737cb02c4b3983a96bb1551c12}
+      \strng{authornamehash}{ffabbc737cb02c4b3983a96bb1551c12}
+      \strng{authorfullhash}{ffabbc737cb02c4b3983a96bb1551c12}
+      \field{sortinit}{B}
+      \field{sortinithash}{276475738cc058478c1677046f857703}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Scattering representations for recognition}
+      \field{type}{phdthesis}
+      \field{year}{2013}
     \endentry
     \entry{bruna2013invariant}{article}{}
       \name{author}{2}{}{%
@@ -128,6 +205,31 @@
       \verb https://github.com/lostanlen/scattering.m/blob/master/lib/convolution/ifft_multiply.m
       \endverb
     \endentry
+    \entry{lostanlen2017convolutional}{thesis}{}
+      \name{author}{1}{}{%
+        {{hash=2c274a15454683891717ffd9d54c7e19}{%
+           family={Lostanlen},
+           familyi={L\bibinitperiod},
+           given={V.},
+           giveni={V\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {PSL Research University}%
+      }
+      \strng{namehash}{2c274a15454683891717ffd9d54c7e19}
+      \strng{fullhash}{2c274a15454683891717ffd9d54c7e19}
+      \strng{bibnamehash}{2c274a15454683891717ffd9d54c7e19}
+      \strng{authorbibnamehash}{2c274a15454683891717ffd9d54c7e19}
+      \strng{authornamehash}{2c274a15454683891717ffd9d54c7e19}
+      \strng{authorfullhash}{2c274a15454683891717ffd9d54c7e19}
+      \field{sortinit}{L}
+      \field{sortinithash}{2c7981aaabc885868aba60f0c09ee20f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Convolutional operators in the time-frequency domain}
+      \field{type}{phdthesis}
+      \field{year}{2017}
+    \endentry
     \entry{mallat2012group}{article}{}
       \name{author}{1}{}{%
         {{hash=93acb60ca3bf79665bd7c1c41fb6ffba}{%
@@ -166,6 +268,38 @@
       \verb{url}
       \verb http://dx.doi.org/10.1002/cpa.21413
       \endverb
+    \endentry
+    \entry{oyallon2017scaling}{article}{}
+      \name{author}{3}{}{%
+        {{hash=b3a56e54ad6b57a9b6e2d9cd76c329ab}{%
+           family={Oyallon},
+           familyi={O\bibinitperiod},
+           given={Edouard},
+           giveni={E\bibinitperiod}}}%
+        {{hash=482935b14917469a7e5f0bb7af05fdd7}{%
+           family={Belilovsky},
+           familyi={B\bibinitperiod},
+           given={Eugene},
+           giveni={E\bibinitperiod}}}%
+        {{hash=23bcbde34947ed4fd04cc55ff956c83e}{%
+           family={Zagoruyko},
+           familyi={Z\bibinitperiod},
+           given={Sergey},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{23d94e60b9ee17f017cdf6ab792f1ed6}
+      \strng{fullhash}{23d94e60b9ee17f017cdf6ab792f1ed6}
+      \strng{bibnamehash}{23d94e60b9ee17f017cdf6ab792f1ed6}
+      \strng{authorbibnamehash}{23d94e60b9ee17f017cdf6ab792f1ed6}
+      \strng{authornamehash}{23d94e60b9ee17f017cdf6ab792f1ed6}
+      \strng{authorfullhash}{23d94e60b9ee17f017cdf6ab792f1ed6}
+      \field{sortinit}{O}
+      \field{sortinithash}{dad3efd0836470093a7b4a7bb756eb8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{preprint arXiv:1703.08961}
+      \field{title}{Scaling the Scattering Transform: Deep Hybrid Networks}
+      \field{year}{2017}
     \endentry
   \enddatalist
   \missing{bruna2013}
